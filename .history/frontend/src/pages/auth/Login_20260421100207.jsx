@@ -1,0 +1,62 @@
+import React from "react";
+import "../../assets/style/auth/auth.css";
+import facebookIcon from "../../assets/img/facebook.png";
+import googleIcon from "../../assets/img/google.png";
+
+export default function Login({ switchToRegister }) {
+  return (
+    <div className="auth-card">
+      <h2>Login</h2>
+
+      <input className="auth-input" placeholder="Email" />
+      <input className="auth-input" type="password" placeholder="Password" />
+
+      <button className="auth-button">
+        Login
+      </button>
+      
+
+      <p className="auth-link" onClick={switchToRegister}>
+        No account? Register
+      </p>
+
+      import React from "react";
+import "../../assets/style/auth/auth.css";
+
+import facebookIcon from "../../assets/img/facebook.png";
+import googleIcon from "../../assets/img/google.png";
+
+export default function Login({ switchToRegister }) {
+  return (
+    <div className="auth-card">
+      <h2>Login</h2>
+
+      <input className="auth-input" placeholder="Email" />
+      <input className="auth-input" type="password" placeholder="Password" />
+
+      <button className="auth-button">Login</button>
+
+      {/* SOCIAL LOGIN */}
+      <div className="auth-social">
+
+        <button className="social-btn">
+          <img src={googleIcon} alt="google" />
+          Google
+        </button>
+
+        <button className="social-btn">
+          <img src={facebookIcon} alt="facebook" />
+          Facebook
+        </button>
+
+      </div>
+
+      <p className="auth-link" onClick={switchToRegister}>
+        No account? Register
+      </p>
+    </div>
+  );
+}
+    </div>
+  );
+}

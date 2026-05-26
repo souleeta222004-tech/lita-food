@@ -1,0 +1,60 @@
+.payment-page {
+  padding: 20px;
+  background: #f9fafb;
+}
+
+.payment-filter {
+  margin: 15px 0;
+  display: flex;
+  gap: 10px;
+}
+
+.payment-filter button {
+  border: none;
+  padding: 6px 12px;
+  border-radius: 20px;
+  background: #eee;
+  cursor: pointer;
+}
+
+.payment-filter .active {
+  background: #fce7f3;
+  color: #be185d;
+}
+
+.payment-table {
+  background: #fff;
+  border-radius: 12px;
+  padding: 10px;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+th {
+  background: #e0f2fe;
+  padding: 10px;
+}
+
+td {
+  padding: 10px;
+  border-bottom: 1px solid #eee;
+}
+
+tr:hover {
+  background: #f0fdf4;
+}
+
+.status.success {
+  color: green;
+}
+
+.status.pending {
+  color: orange;
+}
+
+.status.failed {
+  color: red;
+}

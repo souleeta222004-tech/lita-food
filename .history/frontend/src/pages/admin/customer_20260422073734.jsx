@@ -1,0 +1,1 @@
+//frontend/src/pages/admin/customer.jsx

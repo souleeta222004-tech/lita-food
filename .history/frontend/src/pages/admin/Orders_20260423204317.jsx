@@ -1,0 +1,120 @@
+import { useState, useMemo, useEffect } from "react";
+import OrderList from "../../components/admin/order/OrderList";
+import OrderDetail from "../../components/admin/order/OrderDetail";
+import OrderFilter from "../../components/admin/order/OrderFilter";
+import OrderActionPanel from "../../components/admin/order/OrderActionPanel";
+import { createPayment } from "../../services/payment.service";
+import "../../assets/style/admin/order.css";
+
+import {
+  getOrders,
+  updateOrderStatus,
+} from "../../services/order.service";
+
+export default function Orders() {
+  const [orders, setOrders] = useState([]);
+  const [selectedOrder, setSelectedOrder] = useState(null);
+  const [statusFilter, setStatusFilter] = useState("all");
+  const [mobileView, setMobileView] = useState("list");
+
+  // ✅ FETCH API
+  const fetchOrders = async () => {
+    try {
+      const params =
+        statusFilter !== "all" ? { status: statusFilter } : {};
+
+      const res = await getOrders(params);
+
+      setOrders(res.data.data);
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  useEffect(() => {
+    fetchOrders();
+  }, [statusFilter]);
+
+  // ✅ FILTER (không cần nữa nếu backend filter)
+  const filteredOrders = useMemo(() => {
+    return orders;
+  }, [orders]);
+
+  const handleSelect = (order) => {
+    setSelectedOrder(order);
+    setMobileView("detail");
+  };
+
+  // ✅ UPDATE STATUS
+  const handleUpdateStatus = async (status) => {
+    if (!selectedOrder) return;
+
+    try {
+      await updateOrderStatus(selectedOrder._id, status);
+
+      fetchOrders();
+
+      setSelectedOrder((prev) => ({
+        ...prev,
+        status,
+      }));
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  const handlePay = async () => {
+  if (!selectedOrder) return;
+
+  try {
+    await createPayment({
+      orderId: selectedOrder._id,
+      method: "cash", // hoặc "banking"
+    });
+
+    // reload lại danh sách
+    fetchOrders();
+
+    // update UI hiện tại
+    setSelectedOrder((prev) => ({
+      ...prev,
+      paymentStatus: "paid",
+    }));
+  } catch (err) {
+    console.error(err);
+  }
+};
+
+  return (
+    <div className="order-page">
+      <h2>Quản lý đơn hàng</h2>
+
+      <OrderFilter
+        status={statusFilter}
+        setStatus={setStatusFilter}
+      />
+
+      <div className="order-content">
+        {/* LEFT */}
+        <div className={`order-left ${mobileView === "detail" ? "hide-mobile" : ""}`}>
+          <OrderList orders={filteredOrders} onSelect={handleSelect} />
+        </div>
+
+        {/* RIGHT */}
+        <div className={`order-right ${mobileView === "list" ? "hide-mobile" : ""}`}>
+          <button className="back-btn" onClick={() => setMobileView("list")}>
+            ← Quay lại
+          </button>
+
+          <OrderDetail order={selectedOrder} />
+
+          <OrderActionPanel
+            order={selectedOrder}
+            onUpdateStatus={handleUpdateStatus}
+            onPay={handlePay}
+          />
+        </div>
+      </div>
+    </div>
+  );
+}

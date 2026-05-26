@@ -1,0 +1,137 @@
+/* ===== FILTER ===== */
+.table-filter {
+  margin-bottom: 15px;
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.table-filter button {
+  border: none;
+  padding: 6px 12px;
+  border-radius: 20px;
+  background: var(--blue-soft);
+  cursor: pointer;
+  font-size: 13px;
+}
+
+.table-filter button.active {
+  background: var(--pink-main);
+  color: white;
+}
+
+/* ===== CARD ===== */
+.table-card {
+  background: var(--white);
+  border-radius: var(--radius);
+  padding: 15px;
+  position: relative;
+  border: 2px solid transparent;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+  transition: 0.2s;
+}
+
+.table-card.available {
+  border-color: #22c55e;
+}
+
+.table-card.occupied {
+  border-color: #ef4444;
+}
+
+.table-card h3 {
+  margin: 0;
+  color: var(--text-main);
+}
+
+.table-code {
+  font-size: 12px;
+  color: var(--text-light);
+}
+
+/* ===== STATUS ===== */
+.table-status {
+  margin-top: 8px;
+  padding: 4px 10px;
+  border-radius: 20px;
+  font-size: 12px;
+  display: inline-block;
+}
+
+.table-status.available {
+  background: #dcfce7;
+  color: #166534;
+}
+
+.table-status.occupied {
+  background: #fee2e2;
+  color: #991b1b;
+}
+
+/* ===== QR ===== */
+.table-qr {
+  width: 80px;
+  margin-top: 10px;
+}
+
+/* ===== ACTIONS ===== */
+.table-actions {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  display: flex;
+  gap: 5px;
+}
+
+.table-actions button {
+  border: none;
+  background: var(--white);
+  border-radius: 6px;
+  padding: 5px;
+  cursor: pointer;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+.table-content {
+  display: flex;
+  gap: 20px;
+  align-items: flex-start; /* ⭐ tránh bị kéo giãn */
+}
+
+.table-left {
+  width: 70%;
+}
+
+.table-right {
+  width: 30%;
+  background: var(--white);
+  padding: 15px;
+  border-radius: var(--radius);
+}
+
+
+
+
+@media (max-width: 768px) {
+  .table-content {
+    flex-direction: column;
+  }
+
+  .table-left,
+  .table-right {
+    width: 100%;
+  }
+
+  .table-right {
+    margin-top: 10px;
+  }
+
+  .table-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 480px) {
+  .table-grid {
+    grid-template-columns: 1fr;
+  }
+}

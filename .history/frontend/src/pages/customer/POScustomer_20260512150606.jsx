@@ -1,0 +1,336 @@
+```jsx
+import MenuSearchBar from "../../components/admin/menu/MenuSearchBar";
+import CategoryFilter from "../../components/admin/menu/CategoryFilter";
+import POSGrid from "../../components/staff/POSGrid";
+import CartPanel from "../../components/customer/CartPanel";
+
+import { useState, useMemo, useEffect } from "react";
+import { useSearchParams, useNavigate } from "react-router-dom";
+
+import "../../assets/style/staff/POS.css";
+
+import {
+  createQrOrder,
+} from "../../services/order.service";
+
+import { getMenus } from "../../services/menu.service";
+
+import {
+  createPayment,
+} from "../../services/payment.service";
+
+export default function POScustomer() {
+  const [params] = useSearchParams();
+  const navigate = useNavigate();
+
+  const tableId = params.get("table");
+
+  const [menus, setMenus] = useState([]);
+  const [cart, setCart] = useState([]);
+
+  const [search, setSearch] = useState("");
+  const [category, setCategory] =
+    useState("Tất cả");
+
+  const [showCart, setShowCart] =
+    useState(false);
+
+  const [loading, setLoading] =
+    useState(false);
+
+  const [note, setNote] = useState("");
+
+  // ================= TABLE CHECK =================
+  useEffect(() => {
+    if (!tableId) {
+      navigate("/select-table");
+    } else {
+      localStorage.setItem(
+        "tableId",
+        tableId
+      );
+    }
+  }, [tableId, navigate]);
+
+  // ================= LOAD MENU =================
+  useEffect(() => {
+    const fetchMenus = async () => {
+      try {
+        const res = await getMenus();
+
+        const formatted = (
+          res.data.data || res.data
+        ).map((item) => ({
+          _id: item._id,
+          name: item.name,
+          price: item.price,
+
+          category: item.category,
+
+          image: item.image
+            ? `http://localhost:5000/uploads/${item.image}`
+            : "",
+        }));
+
+        setMenus(formatted);
+      } catch (err) {
+        console.log(
+          "❌ Load menu error:",
+          err
+        );
+      }
+    };
+
+    fetchMenus();
+  }, []);
+
+  // ================= CATEGORY LIST =================
+  const categories = useMemo(() => {
+    const unique = [
+      ...new Set(
+        menus.map((m) =>
+          typeof m.category === "object"
+            ? m.category?.name
+            : m.category
+        )
+      ),
+    ];
+
+    return [
+      "Tất cả",
+      ...unique.filter(Boolean),
+    ];
+  }, [menus]);
+
+  // ================= FILTER MENU =================
+  const filteredMenus = useMemo(() => {
+    return menus.filter((item) => {
+      const matchCategory =
+        category === "Tất cả" ||
+        item.category?.name === category ||
+        item.category === category;
+
+      const matchSearch = item.name
+        .toLowerCase()
+        .includes(search.toLowerCase());
+
+      return (
+        matchCategory && matchSearch
+      );
+    });
+  }, [menus, category, search]);
+
+  // ================= ADD TO CART =================
+  const addToCart = (item) => {
+    setCart((prev) => {
+      const exist = prev.find(
+        (p) => p._id === item._id
+      );
+
+      if (exist) {
+        return prev.map((p) =>
+          p._id === item._id
+            ? {
+                ...p,
+                quantity: p.quantity + 1,
+              }
+            : p
+        );
+      }
+
+      return [
+        ...prev,
+        {
+          ...item,
+          quantity: 1,
+        },
+      ];
+    });
+  };
+
+  // ================= CHECKOUT =================
+  const handleCheckout = async ({
+    paymentMethod,
+    provider,
+  }) => {
+    try {
+      if (!cart.length) {
+        return alert(
+          "Giỏ hàng trống!"
+        );
+      }
+
+      setLoading(true);
+
+      // ================= CREATE ORDER =================
+      const payload = {
+        table: tableId,
+        source: "qr",
+
+        items: cart.map((i) => ({
+          product: i._id,
+          quantity: i.quantity,
+        })),
+
+        note,
+      };
+
+      console.log(
+        "🔥 QR ORDER PAYLOAD:"
+      );
+
+      console.log(
+        JSON.stringify(payload, null, 2)
+      );
+
+      // 🔥 TẠO ORDER
+      const orderRes =
+        await createQrOrder(payload);
+
+      const order =
+        orderRes.data.data;
+
+      console.log(
+        "✅ ORDER SUCCESS:",
+        order
+      );
+
+      // =========================================
+      // CASH
+      // =========================================
+      if (
+        paymentMethod === "cash"
+      ) {
+        alert(
+          "Đặt hàng thành công! Vui lòng thanh toán tại quầy."
+        );
+
+        setCart([]);
+        setShowCart(false);
+        setNote("");
+
+        localStorage.removeItem(
+          "cart"
+        );
+
+        return;
+      }
+
+      // =========================================
+      // BANKING
+      // =========================================
+      await createPayment({
+        orderId: order._id,
+
+        method: "banking",
+
+        provider,
+      });
+
+      alert(
+        `Thanh toán ${provider.toUpperCase()} thành công 🎉`
+      );
+
+      setCart([]);
+      setShowCart(false);
+      setNote("");
+
+      localStorage.removeItem(
+        "cart"
+      );
+
+    } catch (err) {
+      console.log(
+        "❌ CHECKOUT ERROR:",
+        err
+      );
+
+      alert(
+        err?.response?.data
+          ?.message ||
+          "Thanh toán thất bại"
+      );
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return (
+    <div className="menu-page pos-page">
+
+      {/* TABLE INFO */}
+      <p className="table-label">
+        🪑 Bàn: <b>{tableId}</b>
+      </p>
+
+      {/* SEARCH */}
+      <MenuSearchBar
+        search={search}
+        setSearch={setSearch}
+      />
+
+      {/* CATEGORY */}
+      <CategoryFilter
+        category={category}
+        setCategory={setCategory}
+        categories={categories}
+      />
+
+      <div className="menu-content">
+
+        {/* LEFT */}
+        <div className="menu-left">
+          <POSGrid
+            menus={filteredMenus}
+            onAdd={addToCart}
+          />
+        </div>
+
+        {/* RIGHT */}
+        <div className="menu-right">
+          <CartPanel
+            cart={cart}
+            setCart={setCart}
+            tableId={tableId}
+            note={note}
+            setNote={setNote}
+            onCheckout={
+              handleCheckout
+            }
+            loading={loading}
+          />
+        </div>
+      </div>
+
+      {/* FLOAT CART */}
+      {cart.length > 0 && (
+        <div
+          className="cart-bubble"
+          onClick={() =>
+            setShowCart(!showCart)
+          }
+        >
+          🛒 <span>{cart.length}</span>
+        </div>
+      )}
+
+      {/* MINI CART */}
+      {showCart && (
+        <div className="cart-mini">
+          <CartPanel
+            cart={cart}
+            setCart={setCart}
+            tableId={tableId}
+            note={note}
+            setNote={setNote}
+            onCheckout={
+              handleCheckout
+            }
+            loading={loading}
+          />
+        </div>
+      )}
+    </div>
+  );
+}
+```

@@ -1,0 +1,18 @@
+:root {
+  --pink-main: #f9a8d4;
+  --pink-soft: #fdf2f8;
+
+  --blue-main: #93c5fd;
+  --blue-soft: #eff6ff;
+
+  --bg-main: #f8fafc;
+  --white: #ffffff;
+
+  --text-main: #334155;
+  --text-light: #64748b;
+
+  --radius: 16px;
+
+  --shadow-soft: 0 8px 24px rgba(0,0,0,0.05);
+  --shadow-hover: 0 12px 30px rgba(0,0,0,0.08);
+}

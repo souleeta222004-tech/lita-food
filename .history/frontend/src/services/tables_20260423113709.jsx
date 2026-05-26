@@ -1,0 +1,1 @@
+//frontend/src/services/table.service.js

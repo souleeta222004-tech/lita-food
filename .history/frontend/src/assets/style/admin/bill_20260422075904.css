@@ -1,0 +1,39 @@
+.bill-page {
+  padding: 20px;
+  background: #f9fafb;
+}
+
+.bill-content {
+  display: flex;
+  gap: 20px;
+}
+
+.bill-list {
+  width: 40%;
+}
+
+.bill-card {
+  background: #fff;
+  padding: 12px;
+  border-radius: 10px;
+  margin-bottom: 10px;
+  cursor: pointer;
+}
+
+.bill-card:hover {
+  background: #fce7f3;
+}
+
+.bill-detail {
+  width: 60%;
+  background: #fff;
+  padding: 15px;
+  border-radius: 12px;
+}
+
+.bill-item {
+  display: flex;
+  justify-content: space-between;
+  padding: 6px 0;
+  border-bottom: 1px solid #eee;
+}

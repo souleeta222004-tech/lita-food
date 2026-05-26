@@ -1,0 +1,52 @@
+.admin-layout {
+  display: flex;
+  height: 100vh;
+  background: #f7f7fb;
+}
+
+/* SIDEBAR */
+.sidebar {
+  width: 260px;
+  background: #ffe4ec; /* hồng pastel */
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+}
+
+.logo {
+  font-size: 20px;
+  font-weight: bold;
+  color: #444;
+  margin-bottom: 30px;
+}
+
+.sidebar nav {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.sidebar a {
+  text-decoration: none;
+  color: #444;
+  padding: 10px;
+  border-radius: 10px;
+  transition: 0.2s;
+}
+
+.sidebar a:hover {
+  background: #dff6ff; /* xanh pastel */
+}
+
+/* active link */
+.sidebar a.active {
+  background: #c7f9cc;
+  font-weight: bold;
+}
+
+/* MAIN */
+.main-content {
+  flex: 1;
+  padding: 20px;
+  overflow-y: auto;
+}

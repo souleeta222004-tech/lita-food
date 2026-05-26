@@ -1,0 +1,65 @@
+import { useState, useEffect } from "react";
+
+export default function TableForm({ selected, onSubmit }) {
+  const [form, setForm] = useState({
+    name: "",
+    code: "",
+    qrCode: "",
+    status: "available",
+  });
+
+  useEffect(() => {
+    if (selected) setForm(selected);
+    else
+      setForm({
+        name: "",
+        code: "",
+        qrCode: "",
+        status: "available",
+      });
+  }, [selected]);
+
+  const handleChange = (e) => {
+    setForm({ ...form, [e.target.name]: e.target.value });
+  };
+
+  return (
+  <div className="table-form">
+    <h3>{selected ? "Cập nhật bàn" : "Thêm bàn"}</h3>
+
+    <input
+      name="name"
+      placeholder="Tên bàn"
+      value={form.name}
+      onChange={handleChange}
+    />
+
+    <input
+      name="code"
+      placeholder="Mã bàn"
+      value={form.code}
+      onChange={handleChange}
+    />
+
+    <input
+      name="qrCode"
+      placeholder="Link QR"
+      value={form.qrCode}
+      onChange={handleChange}
+    />
+
+    <select
+      name="status"
+      value={form.status}
+      onChange={handleChange}
+    >
+      <option value="available">Trống</option>
+      <option value="occupied">Có khách</option>
+    </select>
+
+    <button onClick={() => onSubmit(form)}>
+      {selected ? "Update" : "Done"}
+    </button>
+  </div>
+);
+}

@@ -1,0 +1,35 @@
+/* ===== PAGE ===== */
+.table-page {
+  padding: 20px;
+  background: var(--bg-main);
+  min-height: 100vh;
+}
+
+/* ===== LAYOUT ===== */
+.table-content {
+  display: flex;
+  gap: 20px;
+}
+
+.table-left {
+  width: 70%;
+}
+
+.table-right {
+  width: 30%;
+  background: var(--white);
+  padding: 15px;
+  border-radius: var(--radius);
+}
+
+/* panel */
+.table-panel {
+  width: 100%;
+}
+
+/* ===== GRID ===== */
+.table-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 15px;
+}

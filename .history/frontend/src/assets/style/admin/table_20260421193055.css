@@ -1,0 +1,74 @@
+/* ===== PAGE ===== */
+.table-page {
+  padding: 20px;
+  background: var(--bg-main);
+  min-height: 100vh;
+}
+
+/* ===== LAYOUT ===== */
+.table-content {
+  display: flex;
+  gap: 20px;
+}
+
+.table-left {
+  width: 70%;
+}
+
+.table-right {
+  width: 30%;
+  background: var(--white);
+  padding: 15px;
+  border-radius: var(--radius);
+}
+
+/* panel */
+.table-panel {
+  width: 100%;
+}
+
+/* ===== GRID ===== */
+.table-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 15px;
+}
+
+.table-form {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  width: 100%;
+}
+
+.table-form input,
+.table-form select,
+.table-form button {
+  width: 100%;
+  padding: 10px;
+  border-radius: 10px;
+  border: 1px solid #ddd;
+}
+
+.table-form input,
+.table-form select {
+  background: var(--blue-soft);
+}
+
+.table-form input:focus,
+.table-form select:focus {
+  outline: none;
+  border-color: var(--pink-main);
+  background: var(--white);
+}
+
+.table-form button {
+  background: linear-gradient(
+    135deg,
+    var(--pink-main),
+    var(--blue-main)
+  );
+  color: white;
+  border: none;
+  cursor: pointer;
+}
