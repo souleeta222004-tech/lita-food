@@ -7,10 +7,10 @@ import Analytics from "../pages/admin/Analytics";
  import Tables from "../pages/admin/tables";
 import Orders from "../pages/admin/Orders";
 import CustomerPage from "../pages/admin/customer";
-import StaffPage from "../pages/admin/staff";
+import StaffPage from "../pages/admin/Staff";
 import MorePage from "../components/admin/MorePage";
-import InvoicesPage from "../pages/admin/invoices";
-import PaymentPage from "../pages/admin/payment";
+import InvoicesPage from "../pages/admin/Invoices";
+import PaymentPage from "../pages/admin/Payment";
 export default function AdminRoutes() {
   return (
     <Routes>
